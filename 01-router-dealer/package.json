@@ -1,0 +1,11 @@
+{
+  "name": "01-router-dealer",
+  "version": "0.1.0",
+  "author": "Pavol Varga",
+  "license": "MIT",
+  "dependencies": {
+    "node-report": "2.2.1",
+    "zeromq": "4.6.0",
+    "docopt": "0.6.2"
+  }
+}
