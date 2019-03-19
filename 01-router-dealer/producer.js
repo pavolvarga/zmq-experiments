@@ -8,38 +8,39 @@ Producing messages for ZMQ
 
 Usage:
   producer [--port <port>] [--frequency <frequency>] [--size <size>]
+  [--zmq-hwm <zmq-hwm>] [--zmq-rcv-buf <zmq-rcv-buf>] [--zmq-snd-buf <zmq-snd-buf>]
 
 Options:
-  -h --help                    Print this help.
-  -p --port <port>             TCP port for producer. Default: ${DEFAULTS.PRODUCER_PORT}.
-  -f --frequency <frequency>   Frequency of sendinding messages in milliseconds. Default: ${DEFAULTS.SENDING_FREQUENCY} ms.
-  -s --size <size>             Size of a messages. For example: 2.5kb. Allowed units are: b, kb, mb (both lower and upper case).
-                               Default: ${DEFAULTS.MSG_SIZE}.
+  -h --help                     Print this help.
+  -p --port <port>              TCP port for producer. Default: ${DEFAULTS.PRODUCER_PORT}.
+  -f --frequency <frequency>    Frequency of sendinding messages in milliseconds. Default: ${DEFAULTS.SENDING_FREQUENCY} ms.
+  -s --size <size>              Size of a messages. For example: 2.5kb. Allowed units are: b, kb, mb (both lower and upper case).
+                                Default: ${DEFAULTS.MSG_SIZE}.
+  --zmq-rcv-hwm <zmq-rcv-hwm>   New value for ZMQ_RCVHWM.
+  --zmq-snd-hwm <zmq-snd-hwm>   New value for ZMQ_SNDHWM.
+  --zmq-rcv-buf <zmq-rcv-buf>   New value for ZMQ_RCVBUF.
+  --zmq-snd-buf <zmq-snd-buf>   New value for ZMQ_SNDBUF.
 `;
 
 const
   // nodeReport = require('node-report'),
   zmq = require('zeromq'),
   {docopt} = require('docopt'),
-  {generateMsg} = require('./utils');
+  {generateMsg} = require('./utils'),
+  {parseZmqDocOptions, createSocket, readSocketOpts} = require('./utils');
 
 const
   opts = docopt(DOC, {version: '1.0'}),
-  port = opts['--port'] ? opts['--port'] : DEFAULTS.PORT,
-  frequency = opts['--frequency'] ? opts['--frequency'] : DEFAULTS.SENDING_FREQUENCY,
-  msgSize = opts['--size'] ? opts['--size'] : DEFAULTS.MSG_SIZE,
+  {port, frequency, msgSize, zmqRcvHwm, zmqSndHwm, zmqRcvBuf, zmqSndBuf} = parseOpts(opts),
   msg = generateMsg(msgSize);
 
 const
-  router = zmq.socket('router'),
-  sndHwm = router.getsockopt(23),
-  rcvHwm = router.getsockopt(24),
-  sndBuf = router.getsockopt(11),
-  rcvBuf = router.getsockopt(12);
+    router = createSocket('router', zmqRcvHwm, zmqSndHwm, zmqRcvBuf, zmqSndBuf),
+    {readZmqRcvHwm, readZmqSndHwm, readZmqRcvBuf, readZmqSndBuf} = readSocketOpts(router);
 
 console.log(`Versions [node: ${process.versions.node}, libuv: ${process.versions.uv}, v8: ${process.versions.v8}, zmq: ${zmq.version}]`);
 console.log(`Producer (Router Socket) [port: ${port}, frequency: ${frequency}ms, msg size: ${msgSize}]`);
-console.log(`Producer (Router Socket) [sndHwm: ${sndHwm}, rcvHwm: ${rcvHwm}, sndBuf: ${sndBuf}, rcvBuf: ${rcvBuf}]`);
+console.log(`Producer (Router Socket) [zmq-rcv-hwm: ${readZmqRcvHwm}, zmq-snd-hwm: ${readZmqSndHwm}, zmq-rcv-buf: ${readZmqRcvBuf}, zmq-snd-buf: ${readZmqSndBuf}]`);
 
 router.bind(`tcp://*:${port}`);
 
@@ -69,6 +70,17 @@ router.on('message', (...frames) => {
   }
 
 });
+
+function parseOpts(opts) {
+
+  const
+      port = opts['--port'] ? opts['--port'] : DEFAULTS.PRODUCER_PORT,
+      frequency = opts['--frequency'] ? opts['--frequency'] : DEFAULTS.SENDING_FREQUENCY,
+      msgSize = opts['--size'] ? opts['--size'] : DEFAULTS.MSG_SIZE,
+      {zmqRcvHwm, zmqSndHwm, zmqRcvBuf, zmqSndBuf} = parseZmqDocOptions(opts);
+
+  return {port, frequency, msgSize, zmqRcvHwm, zmqSndHwm, zmqRcvBuf, zmqSndBuf};
+}
 
 function send() {
   console.log(`Sending: ${seq}, to identity: ${identity.toString('base64')}, length: ${msg.length}`);

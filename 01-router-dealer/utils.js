@@ -1,6 +1,9 @@
 'use strict';
 
-const {DEFAULTS} = require('./defaults');
+const
+    zmq = require('zeromq'),
+    {DEFAULTS} = require('./defaults'),
+    {ZMQ_SNDHWM, ZMQ_RCVHWM, ZMQ_SNDBUF, ZMQ_RCVBUF} = require('./const');
 
 function extractValues(val) {
 
@@ -37,4 +40,48 @@ function generateMsg(val) {
   return DEFAULTS.MSG_CHARACTER.repeat(count);
 }
 
+function parseZmqDocOptions(opts) {
+
+  const
+    zmqRcvHwm = opts['--zmq-rcv-hwm'],
+    zmqSndHwm = opts['--zmq-snd-hwm'],
+    zmqRcvBuf = opts['--zmq-rcv-buf'],
+    zmqSndBuf = opts['--zmq-snd-buf'];
+
+  return {zmqRcvHwm, zmqSndHwm, zmqRcvBuf, zmqSndBuf};
+}
+
+function readSocketOpts(socket) {
+
+  const
+    readZmqRcvHwm = socket.getsockopt(ZMQ_RCVHWM),
+    readZmqSndHwm = socket.getsockopt(ZMQ_SNDHWM),
+    readZmqRcvBuf = socket.getsockopt(ZMQ_RCVBUF),
+    readZmqSndBuf = socket.getsockopt(ZMQ_SNDBUF);
+
+  return {readZmqRcvHwm, readZmqSndHwm, readZmqRcvBuf, readZmqSndBuf};
+}
+
+function createSocket(type, zmqRcvHwm, zmqSndHwm, zmqRcvBuf, zmqSndBuf) {
+
+  const socket = zmq.socket(type);
+  if (zmqRcvHwm) {
+    socket.setsockopt(ZMQ_RCVHWM, parseInt(zmqRcvHwm, 10));
+  }
+  if (zmqSndHwm) {
+    socket.setsockopt(ZMQ_SNDHWM, parseInt(zmqSndHwm, 10));
+  }
+  if (zmqRcvBuf) {
+    socket.setsockopt(ZMQ_RCVBUF, parseInt(zmqRcvBuf, 10));
+  }
+  if (zmqSndBuf) {
+    socket.setsockopt(ZMQ_SNDBUF, parseInt(zmqSndBuf, 10));
+  }
+
+  return socket;
+}
+
 module.exports.generateMsg = generateMsg;
+module.exports.createSocket = createSocket;
+module.exports.parseZmqDocOptions = parseZmqDocOptions;
+module.exports.readSocketOpts = readSocketOpts;
