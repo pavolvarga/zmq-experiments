@@ -37,6 +37,7 @@ const
   sndBuf = router.getsockopt(11),
   rcvBuf = router.getsockopt(12);
 
+console.log(`Versions [node: ${process.versions.node}, libuv: ${process.versions.uv}, v8: ${process.versions.v8}, zmq: ${zmq.version}]`);
 console.log(`Producer (Router Socket) [port: ${port}, frequency: ${frequency}ms, msg size: ${msgSize}]`);
 console.log(`Producer (Router Socket) [sndHwm: ${sndHwm}, rcvHwm: ${rcvHwm}, sndBuf: ${sndBuf}, rcvBuf: ${rcvBuf}]`);
 

@@ -39,6 +39,7 @@ const
   sndBuf = dealer.getsockopt(11),
   rcvBuf = dealer.getsockopt(12);
 
+console.log(`Versions [node: ${process.versions.node}, libuv: ${process.versions.uv}, v8: ${process.versions.v8}, zmq: ${zmq.version}]`);
 console.log(`Consumer (Dealer Socket) [host: ${host}, port: ${port}, work: ${workType}]`);
 console.log(`Consumer (Dealer Socket) [sndHwm: ${sndHwm}, rcvHwm: ${rcvHwm}, sndBuf: ${sndBuf}, rcvBuf: ${rcvBuf}]`);
 
