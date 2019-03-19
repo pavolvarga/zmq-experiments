@@ -11,7 +11,7 @@ Usage:
 
 Options:
   -h --help                    Print this help.
-  -p --port <port>             TCP port for producer. Default: ${DEFAULTS.PORT}.
+  -p --port <port>             TCP port for producer. Default: ${DEFAULTS.PRODUCER_PORT}.
   -f --frequency <frequency>   Frequency of sendinding messages in milliseconds. Default: ${DEFAULTS.SENDING_FREQUENCY} ms.
   -s --size <size>             Size of a messages. For example: 2.5kb. Allowed units are: b, kb, mb (both lower and upper case).
                                Default: ${DEFAULTS.MSG_SIZE}.
@@ -37,8 +37,8 @@ const
   sndBuf = router.getsockopt(11),
   rcvBuf = router.getsockopt(12);
 
-console.log(`Producer - Router Socket - sndHwm: ${sndHwm}, rcvHwm: ${rcvHwm}, sndBuf: ${sndBuf}, rcvBuf: ${rcvBuf}`);
-console.log(`Port: ${port}, frequency: ${frequency}ms, msg size: ${msgSize}`);
+console.log(`Producer (Router Socket) [port: ${port}, frequency: ${frequency}ms, msg size: ${msgSize}]`);
+console.log(`Producer (Router Socket) [sndHwm: ${sndHwm}, rcvHwm: ${rcvHwm}, sndBuf: ${sndBuf}, rcvBuf: ${rcvBuf}]`);
 
 router.bind(`tcp://*:${port}`);
 

@@ -9,11 +9,12 @@ const DOC = `
 Consuming messages from ZMQ
 
 Usage:
-  consumer [--port <port>] [--work <work]
+  consumer [--port <port>] [--host <host>] [--work <work]
 
 Options:
   -h --help             Print this help.
-  -p --port <port>      TCP port for consumer. Default: ${DEFAULTS.PORT}.
+  -p --port <port>      Port for consumer to connect to. Default: ${DEFAULTS.PRODUCER_PORT}.
+  -h --host <host>      Host for consumer to connect to. Default: ${DEFAULTS.PRODUCER_HOST}.
   -w --work <work>      How much time to spend on a single message. This simulates processing of messages in real applications.
                         Possible values: ${works}. Values depends on user's hardware. Change implementations of methods in 'work.js'
                         for your own hardware.
@@ -27,7 +28,8 @@ const
 
 const
     opts = docopt(DOC, {version: '1.0'}),
-    port = opts['--port'] ? opts['--port'] : DEFAULTS.PORT,
+    port = opts['--port'] ? opts['--port'] : DEFAULTS.PRODUCER_PORT,
+    host = opts['--host'] ? opts['--host'] : DEFAULTS.PRODUCER_HOST,
     workType = opts['--work'] ? opts['--work'] : DEFAULTS.WORK_TYPE;
 
 const
@@ -37,10 +39,10 @@ const
   sndBuf = dealer.getsockopt(11),
   rcvBuf = dealer.getsockopt(12);
 
-console.log(`Consumer - Dealer Socket - sndHwm: ${sndHwm}, rcvHwm: ${rcvHwm}, sndBuf: ${sndBuf}, rcvBuf: ${rcvBuf}`);
-console.log(`Port: ${port}, work: ${workType}`);
+console.log(`Consumer (Dealer Socket) [host: ${host}, port: ${port}, work: ${workType}]`);
+console.log(`Consumer (Dealer Socket) [sndHwm: ${sndHwm}, rcvHwm: ${rcvHwm}, sndBuf: ${sndBuf}, rcvBuf: ${rcvBuf}]`);
 
-dealer.connect(`tcp://localhost:${port}`);
+dealer.connect(`tcp://${host}:${port}`);
 
 let previousSeq = 0;
 
