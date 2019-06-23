@@ -8,7 +8,7 @@ Producing messages for ZMQ
 
 Usage:
   producer [--port <port>] [--frequency <frequency>] [--size <size>]
-  [--zmq-hwm <zmq-hwm>] [--zmq-rcv-buf <zmq-rcv-buf>] [--zmq-snd-buf <zmq-snd-buf>]
+  [--zmq-rcv-hwm <zmq-rcv-hwm>] [--zmq-snd-hwm <zmq-snd-hwm>] [--zmq-rcv-buf <zmq-rcv-buf>] [--zmq-snd-buf <zmq-snd-buf>]
 
 Options:
   -h --help                     Print this help.

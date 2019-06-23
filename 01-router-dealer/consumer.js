@@ -9,8 +9,8 @@ const DOC = `
 Consuming messages from ZMQ
 
 Usage:
-  consumer [--port <port>] [--host <host>] [--work <work]
-  [--zmq-hwm <zmq-hwm>] [--zmq-rcv-buf <zmq-rcv-buf>] [--zmq-snd-buf <zmq-snd-buf>]
+  consumer [--port <port>] [--host <host>] [--work <work>]
+  [--zmq-rcv-hwm <zmq-rcv-hwm>] [--zmq-snd-hwm <zmq-snd-hwm>] [--zmq-rcv-buf <zmq-rcv-buf>] [--zmq-snd-buf <zmq-snd-buf>]
 
 Options:
   -h --help                     Print this help.
@@ -42,7 +42,7 @@ const
 
 console.log(`Versions [node: ${process.versions.node}, libuv: ${process.versions.uv}, v8: ${process.versions.v8}, zmq: ${zmq.version}]`);
 console.log(`Consumer (Dealer Socket) [host: ${host}, port: ${port}, work: ${workType}]`);
-console.log(`Producer (Router Socket) [zmq-rcv-hwm: ${readZmqRcvHwm}, zmq-snd-hwm: ${readZmqSndHwm}, zmq-rcv-buf: ${readZmqRcvBuf}, zmq-snd-buf: ${readZmqSndBuf}]`);
+console.log(`Consumer (Dealer Socket) [zmq-rcv-hwm: ${readZmqRcvHwm}, zmq-snd-hwm: ${readZmqSndHwm}, zmq-rcv-buf: ${readZmqRcvBuf}, zmq-snd-buf: ${readZmqSndBuf}]`);
 
 dealer.connect(`tcp://${host}:${port}`);
 
