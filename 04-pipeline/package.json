@@ -1,0 +1,9 @@
+{
+  "name": "04-publish-subscribe",
+  "version": "0.1.0",
+  "author": "Pavol Varga",
+  "license": "MIT",
+  "dependencies": {
+    "zeromq": "4.6.0"
+  }
+}
