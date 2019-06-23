@@ -1,0 +1,9 @@
+{
+  "name": "02-request-replay",
+  "version": "0.1.0",
+  "author": "Pavol Varga",
+  "license": "MIT",
+  "dependencies": {
+    "zeromq": "4.6.0"
+  }
+}
