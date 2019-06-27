@@ -42,8 +42,9 @@ cd 02-request-reply
 npm install
 ```
 
-Because for running you must run multiple node.js file you must connect to an existing container.
-Run the image only once, each run will create a separate container.
+For running you must run multiple node.js files, therefore you must connect to an existing container.
+Run the image only once, and then connect to the container. Had you run the image several times, you would
+have created multiple containers.
 <br/>
 
 For each file attach a new shell.
