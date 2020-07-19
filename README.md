@@ -28,7 +28,7 @@ In some experiments you might run a file multiple times.
 
 Pull the image
 ```sh
-git pull pavolvarga1024/zmq-experiments
+docker pull pavolvarga1024/zmq-experiments
 ```
 
 Run the image
